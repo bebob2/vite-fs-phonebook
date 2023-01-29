@@ -12,6 +12,11 @@ const App = () => {
     if (newName.trim() === "") {
       return;
     }
+
+    if (persons.some((person) => person.name === newName)) {
+      alert(`${newName} already added`);
+      return;
+    }
     setPersons([...persons, { name: newName }]);
   };
 
