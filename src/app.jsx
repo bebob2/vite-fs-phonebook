@@ -2,19 +2,30 @@ import { useState } from "react";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "01764224847" },
+    { name: "Arto Hellas", number: "040-123456", id: 1 },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
+    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
+    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
   const [newName, setNewName] = useState("bia");
   const [newNumber, setNewNumber] = useState("01794334642");
 
-  const handleChange = (event) => {
+  const [filter, setFilter] = useState("");
+
+  const handleChangeName = (event) => {
     console.log("bia", event.target);
     setNewName(event.target.value);
   };
   const handleChangeNumber = ({ target: { value } }) => {
     setNewNumber(value);
   };
-
+  const handleChangeFilter = ({ target: { value } }) => {
+    setFilter(value);
+  };
+  const filterPersons = (person) => {
+    const regExp = new RegExp(`${filter}`, "gi");
+    return person.name.match(regExp);
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     if (newName.trim() === "" || newNumber.trim() === "") {
@@ -43,10 +54,15 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+
+      <span>filter shown with </span>
+      <input onChange={handleChangeFilter} type="text" />
+
+      <h2>add a new</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input onChange={handleChange} value={newName} />
+          name: <input onChange={handleChangeName} value={newName} />
         </div>
         <div>
           number: <input value={newNumber} onChange={handleChangeNumber} />
@@ -58,7 +74,7 @@ const App = () => {
       <h2>Numbers</h2>
 
       <ul>
-        {persons.map((person, index) => {
+        {persons.filter(filterPersons).map((person, index) => {
           const { name, number } = person;
 
           return (
