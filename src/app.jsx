@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Field } from "./components/field";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -7,23 +8,29 @@ const App = () => {
     { name: "Dan Abramov", number: "12-43-234345", id: 3 },
     { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
-  const [newName, setNewName] = useState("bia");
-  const [newNumber, setNewNumber] = useState("01794334642");
+
+  const [formState, setFormState] = useState({
+    name: "bia",
+    number: "01794334642",
+  });
+
+  const { name: newName, number: newNumber } = formState;
 
   const [filter, setFilter] = useState("");
 
-  const handleChangeName = (event) => {
-    console.log("bia", event.target);
-    setNewName(event.target.value);
+  const handleChangeForm = ({ target: { value, name } }) => {
+    setFormState({ ...formState, [name]: value });
   };
-  const handleChangeNumber = ({ target: { value } }) => {
-    setNewNumber(value);
-  };
+
   const handleChangeFilter = ({ target: { value } }) => {
     setFilter(value);
   };
   const filterPersons = (person) => {
-    const regExp = new RegExp(`${filter}`, "gi");
+    const escape = (regExp) => {
+      return regExp.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    };
+    console.log("2", escape(filter));
+    const regExp = new RegExp(`${escape(filter)}`, "gi");
     return person.name.match(regExp);
   };
   const handleSubmit = (event) => {
@@ -57,15 +64,21 @@ const App = () => {
       <h1>Phonebook</h1>
 
       <span>filter shown with </span>
-      <input onChange={handleChangeFilter} type="text" />
+      <input
+        placeholder="SEARCH!!!"
+        onChange={handleChangeFilter}
+        type="text"
+      />
 
       <h2>add a new</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          name: <input onChange={handleChangeName} value={newName} />
+          name:{" "}
+          <input name="name" onChange={handleChangeForm} value={newName} />
         </div>
         <div>
-          number: <input value={newNumber} onChange={handleChangeNumber} />
+          number:{" "}
+          <input name="number" value={newNumber} onChange={handleChangeForm} />
         </div>
         <div>
           <button type="submit">add</button>
@@ -79,7 +92,8 @@ const App = () => {
 
           return (
             <li key={index}>
-              {name}: {number}
+              <Field value={name} />: <Field value={number} />
+              {/* {name}: {number} */}
             </li>
           );
         })}
