@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { useState } from "react";
 
-export const Field = ({ value }) => {
+export const Field = ({ value, setValue }) => {
   const [edit, setEdit] = useState(false);
 
   const inputRef = useRef(null);
@@ -28,11 +28,18 @@ export const Field = ({ value }) => {
     }
     console.log("bla", event.keyCode);
   };
-  const Input = <input ref={inputRef} onKeyDown={handleEnter} value={value} />;
+
+  const handleOnChange = ({ target: { value } }) => setValue(value);
+
   return (
     <>
       {edit ? (
-        <input ref={inputRef} onKeyDown={handleEnter} value={value} />
+        <input
+          onChange={handleOnChange}
+          ref={inputRef}
+          onKeyDown={handleEnter}
+          value={value}
+        />
       ) : (
         <span style={{ userSelect: "none" }} onClick={handleEdit}>
           {value}

@@ -59,6 +59,22 @@ const App = () => {
     setPersons([...persons, { name: newName, number: newNumber }]);
   };
 
+  const setName = (id) => (name) => {
+    setPersons(
+      persons.map((person, index) =>
+        index === id ? { ...person, name: name } : person
+      )
+    );
+  };
+
+  const setNumber = (id) => (number) => {
+    setPersons(
+      persons.map((person, index) =>
+        index === id ? { ...person, number: number } : person
+      )
+    );
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -92,8 +108,8 @@ const App = () => {
 
           return (
             <li key={index}>
-              <Field value={name} />: <Field value={number} />
-              {/* {name}: {number} */}
+              <Field value={name} setValue={setName(index)} />:{" "}
+              <Field value={number} setValue={setNumber(index)} />
             </li>
           );
         })}
