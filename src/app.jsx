@@ -83,6 +83,10 @@ const App = () => {
     );
   };
 
+  const handleRemove = (id) => () => {
+    setPersons(persons.filter((person, index) => index !== id));
+  };
+
   return (
     <div>
       <h1>Phonebook</h1>
@@ -117,7 +121,8 @@ const App = () => {
           return (
             <li key={index}>
               <Field value={name} setValue={setKeyPerson("name", index)} />:{" "}
-              <Field value={number} setValue={setKeyPerson("number", index)} />
+              <Field value={number} setValue={setKeyPerson("number", index)} />{" "}
+              <button onClick={handleRemove(index)}>remove</button>
             </li>
           );
         })}
