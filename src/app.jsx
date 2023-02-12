@@ -9,6 +9,7 @@ const App = () => {
     name: "bia",
     number: "01794334642",
   });
+
   useEffect(() => {
     const getPersons = async () => {
       try {
